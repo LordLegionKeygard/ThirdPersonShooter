@@ -8,15 +8,16 @@ public class PlayerMovement : MonoBehaviour
     private Animator _animator;
     private PlayerSpeed _playerSpeed;
     private CharacterController _characterController;
-    public float RotationSpeed;
+    private float _rotationSpeed = 300;
     private float _velocityMove;
-    [SerializeField] private float acceleration = 0.1f;
-    [SerializeField] private float deceleration = 0.5f;
-    [SerializeField] private bool _canWalk;
-    [SerializeField] private bool _canRotate = true;
-    public bool CanWalk => _canWalk;
-    private bool _isDeath;
+    private float _acceleration = 5;
+    private float _deceleration = 5;
+    private float _gravity = -20;
+    private float _groundedGravity = -2f;
+    private bool _canWalk = true;
+    private bool _canRotate = true;
     private bool _needUpdate = true;
+    private float _verticalVelocity;
 
 
     private void Awake()
@@ -33,11 +34,13 @@ public class PlayerMovement : MonoBehaviour
         _animator.SetFloat("inputY", _playerInputSystem.MoveInput.y, 0.3f, Time.deltaTime * 10f);
 
         Walk();
+        ApplyGravity();
     }
 
     private void Walk()
     {
         Vector3 direction = new Vector3(_playerInputSystem.MoveInput.x, 0f, _playerInputSystem.MoveInput.y).normalized;
+        Vector3 horizontalMove = Vector3.zero;
 
         if (direction.magnitude >= 0.5f)
         {
@@ -48,24 +51,26 @@ public class PlayerMovement : MonoBehaviour
             Vector3 moveDirection = rotationToCamera * direction;
             Quaternion rotationToMoveDirection = Quaternion.LookRotation(moveDirection, Vector3.up);
 
-            if (!_canRotate) return;
+            if (_canRotate)
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationToMoveDirection, _rotationSpeed * Time.deltaTime);
+            }
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationToMoveDirection, RotationSpeed * Time.deltaTime);
-
-            if (!_canWalk) return;
-
-            _characterController.Move(moveDirection.normalized * _playerSpeed.CurrentSpeed * Time.deltaTime);
+            if (_canWalk)
+            {
+                horizontalMove = moveDirection.normalized * _playerSpeed.CurrentSpeed;
+            }
 
             if (_velocityMove < 1.0f)
             {
-                _velocityMove += Time.deltaTime * acceleration;
+                _velocityMove += Time.deltaTime * _acceleration;
             }
         }
         else
         {
             if (_velocityMove > 0.0f)
             {
-                _velocityMove -= Time.deltaTime * deceleration;
+                _velocityMove -= Time.deltaTime * _deceleration;
 
                 if (_needUpdate)
                 {
@@ -74,16 +79,22 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+
+        Vector3 move = horizontalMove;
+        move.y = _verticalVelocity;
+        _characterController.Move(move * Time.deltaTime);
+
         _animator.SetFloat(AnimatorStrings.Speed, _velocityMove);
     }
 
-    private void CanWalkToggle(bool state)
+    private void ApplyGravity()
     {
-        _canWalk = state;
-    }
+        if (_characterController.isGrounded && _verticalVelocity < 0f)
+        {
+            _verticalVelocity = _groundedGravity;
+            return;
+        }
 
-    private void CanRotateToggle(bool state)
-    {
-        _canRotate = state;
+        _verticalVelocity += _gravity * Time.deltaTime;
     }
 }
