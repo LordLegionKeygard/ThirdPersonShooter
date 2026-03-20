@@ -15,18 +15,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "AttackR1",
+                    "name": "Shoot",
                     "type": "Button",
                     "id": "9938b65a-d5e3-4cfd-a460-1339ee0ffa4b",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "AttackR2",
-                    "type": "Button",
-                    "id": "271c031e-9c87-4584-a72a-c6e672108744",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -59,7 +50,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Mouse & Keyboard",
-                    "action": "AttackR1",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -70,7 +61,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "AttackR1",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -81,7 +72,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "AttackR1",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -249,39 +240,6 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "09814bcb-2d66-4187-a0d7-66ceaa05c4d7",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Mouse & Keyboard",
-                    "action": "AttackR2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5b35ce7c-28ea-4562-bc1c-c84badd0cced",
-                    "path": "<DualSenseGamepadHID>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "AttackR2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b7bc0a9f-eb45-4dda-bcb9-f920c2ba7bad",
-                    "path": "<XInputController>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "AttackR2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "PlayStation: RightStick",

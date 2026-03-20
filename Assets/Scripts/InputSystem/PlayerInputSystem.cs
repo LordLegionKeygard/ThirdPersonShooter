@@ -7,8 +7,12 @@ public class PlayerInputSystem : MonoBehaviour
     [SerializeField] private PlayerActions _playerActions;
     public Vector2 MoveInput { get; private set; }
     private PlayerInput _playerInput;
-    private delegate void Run(bool firstState);
-    Run run;
+
+    private delegate void Run(bool state);
+    private Run _run;
+
+    private delegate void Shoot();
+    private Shoot _shoot;
 
     private void Awake()
     {
@@ -28,13 +32,15 @@ public class PlayerInputSystem : MonoBehaviour
 
     private void SetupDelegates()
     {
-        run = new Run(_playerActions.Run);
+        _run = new Run(_playerActions.Run);
+        _shoot = new Shoot(_playerActions.Shoot);
     }
 
     private void SetupInputActions()
     {
-        _playerInput.actions["Run"].performed += _ => run(true);
-        _playerInput.actions["Run"].canceled += _ => run(false);
+        _playerInput.actions["Run"].performed += _ => _run(true);
+        _playerInput.actions["Run"].canceled += _ => _run(false);
+        _playerInput.actions["Shoot"].performed += _ => _shoot();
     }
 
     private void UpdateInputs()
@@ -52,6 +58,7 @@ public class PlayerInputSystem : MonoBehaviour
     {
         InputToggle(false);
 
-        run = delegate { };
+        _run = delegate { };
+        _shoot = delegate { };
     }
 }

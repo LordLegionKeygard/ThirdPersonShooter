@@ -11,7 +11,7 @@ public class PlayerActions : MonoBehaviour
         _playerAnimator = GetComponent<PlayerAnimator>();
     }
 
-    public void Attack()
+    public void Shoot()
     {
 
     }
