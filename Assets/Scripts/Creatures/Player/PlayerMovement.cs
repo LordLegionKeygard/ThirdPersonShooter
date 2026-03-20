@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private Camera _camera;
     [SerializeField] private PlayerInputSystem _playerInputSystem;
     private PlayerActions _playerInputController;
     private Animator _animator;
     private PlayerSpeed _playerSpeed;
     private CharacterController _characterController;
+    private Camera _camera;
     private float _rotationSpeed = 300;
     private float _velocityMove;
     private float _acceleration = 5;
@@ -26,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
         _playerInputController = GetComponent<PlayerActions>();
         _animator = GetComponent<Animator>();
         _playerSpeed = GetComponent<PlayerSpeed>();
+
+        _camera = Camera.main;
     }
 
     private void Update()

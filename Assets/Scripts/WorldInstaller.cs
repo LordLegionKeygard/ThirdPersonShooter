@@ -7,7 +7,6 @@ public class WorldInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-
         Container.Bind<BulletsPool>().FromInstance(_bulletsPool).AsSingle();
     }
 }

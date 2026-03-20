@@ -4,13 +4,13 @@ using Zenject;
 public class PlayerShoot : MonoBehaviour
 {
     [Inject] private BulletsPool _bulletsPool;
-    [SerializeField] private Camera _camera;
     [SerializeField] private Transform _firePoint;
     [SerializeField] private WeaponInfo _weaponInfo;
     [SerializeField] private ParticleSystem _muzzlePs;
     [SerializeField] private LayerMask _shootLayer;
     private PlayerAnimator _playerAnimator;
     private PlayerMovement _playerMovement;
+    private Camera _camera;
     private float _currentCooldown;
     private bool _isShootPressed;
 
@@ -20,6 +20,8 @@ public class PlayerShoot : MonoBehaviour
     {
         _playerAnimator = GetComponent<PlayerAnimator>();
         _playerMovement = GetComponent<PlayerMovement>();
+
+        _camera = Camera.main;
     }
 
     private void Update()
