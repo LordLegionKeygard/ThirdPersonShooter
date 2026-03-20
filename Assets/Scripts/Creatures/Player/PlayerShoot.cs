@@ -13,8 +13,9 @@ public class PlayerShoot : MonoBehaviour
     private Camera _camera;
     private float _currentCooldown;
     private bool _isShootPressed;
+    private bool _isShootAnimationPlaying;
 
-    public bool CanStartShoot() => _currentCooldown <= 0f;
+    public bool CanStartShoot() => _currentCooldown <= 0f && !_isShootAnimationPlaying;
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class PlayerShoot : MonoBehaviour
     {
         if (!CanStartShoot()) return;
 
+        _isShootAnimationPlaying = true;
         _currentCooldown = (_weaponInfo.FireRate > 0f) ? 1f / _weaponInfo.FireRate : 0f;
         _playerMovement.SetMovementBlocked(true);
         _playerAnimator.AnimatorSetTrigger(AnimatorStrings.Shoot);
@@ -89,6 +91,8 @@ public class PlayerShoot : MonoBehaviour
 
     public void OnShootAnimationEnd()
     {
+        _isShootAnimationPlaying = false;
+
         if (_isShootPressed)
         {
             return;

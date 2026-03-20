@@ -55,8 +55,14 @@ public class PlayerActions : MonoBehaviour
 
         if (isPressed)
         {
-            _isShooting = false;
+            _playerShoot.SetShootPressed(false);
             _playerShoot.SetShootMovementLock(false);
+            return;
+        }
+
+        if (_isShooting)
+        {
+            _playerShoot.SetShootPressed(true);
         }
     }
 }
