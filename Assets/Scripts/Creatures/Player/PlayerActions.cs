@@ -16,13 +16,12 @@ public class PlayerActions : MonoBehaviour
 
     private void Update()
     {
-        if (!_isShooting || !_playerShoot.CanShoot())
+        if (!_isShooting || !_playerShoot.CanStartShoot())
         {
             return;
         }
 
-        _playerShoot.Shoot();
-        _playerAnimator.AnimatorSetTrigger(AnimatorStrings.Shoot);
+        _playerShoot.BeginShoot();
     }
 
     public void Shoot(bool isPressed)

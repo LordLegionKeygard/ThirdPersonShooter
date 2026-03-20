@@ -15,9 +15,7 @@ MonoBehaviour:
   BulletType: 0
   FireRate: 0.5
   BulletSpeed: 3
-  SpreadDeg: 1
   LifeTime: 3
-  BulletsPerShot: 1
   Damage: 1
   DamageFactor: 1
   ExplosionPrefab: {fileID: 0}

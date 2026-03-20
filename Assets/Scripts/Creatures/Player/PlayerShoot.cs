@@ -7,8 +7,16 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private Transform _firePoint;
     [SerializeField] private WeaponInfo _weaponInfo;
     [SerializeField] private ParticleSystem _muzzlePs;
+    private PlayerAnimator _playerAnimator;
     private float _currentCooldown;
-    public bool CanShoot() => _currentCooldown <= 0;
+    private bool _isWaitingAnimationEvent;
+
+    public bool CanStartShoot() => _currentCooldown <= 0f && !_isWaitingAnimationEvent;
+
+    private void Awake()
+    {
+        _playerAnimator = GetComponent<PlayerAnimator>();
+    }
 
     private void Update()
     {
@@ -18,17 +26,15 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
-    public void Shoot()
+    public void BeginShoot()
     {
-        if (!CanShoot()) return;
-
-        _currentCooldown = (_weaponInfo.FireRate > 0f) ? 1f / _weaponInfo.FireRate : 0f;
-
-        Fire();
+        if (!CanStartShoot()) return;
+        _playerAnimator.AnimatorSetTrigger(AnimatorStrings.Shoot);
     }
 
     public void Fire()
     {
+        _currentCooldown = (_weaponInfo.FireRate > 0f) ? 1f / _weaponInfo.FireRate : 0f;
         // _muzzlePs.Play();
 
         var go = _bulletsPool.GetBullet(_weaponInfo.BulletType);
