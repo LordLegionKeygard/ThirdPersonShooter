@@ -38,13 +38,14 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 direction = new Vector3(_playerInputSystem.MoveInput.x, 0f, _playerInputSystem.MoveInput.y).normalized;
         Vector3 horizontalMove = Vector3.zero;
+        Vector3 projectedCameraForward = Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up);
+        Quaternion rotationToCamera = projectedCameraForward.sqrMagnitude > Mathf.Epsilon
+            ? Quaternion.LookRotation(projectedCameraForward, Vector3.up)
+            : transform.rotation;
 
         if (direction.magnitude >= 0.5f)
         {
             _needUpdate = true;
-            Vector3 projectedCameraForward = Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up);
-            Quaternion rotationToCamera = Quaternion.LookRotation(projectedCameraForward, Vector3.up);
-
             Vector3 moveDirection = rotationToCamera * direction;
             Quaternion rotationToMoveDirection = Quaternion.LookRotation(moveDirection, Vector3.up);
 
@@ -105,5 +106,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
         transform.rotation = Quaternion.LookRotation(cameraForward.normalized, Vector3.up);
+    }
+
+    public void SetMovementBlocked(bool state)
+    {
+        _canWalk = !state;
+        _canRotate = !state;
     }
 }

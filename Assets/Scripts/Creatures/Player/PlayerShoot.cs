@@ -9,13 +9,16 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private WeaponInfo _weaponInfo;
     [SerializeField] private ParticleSystem _muzzlePs;
     private PlayerAnimator _playerAnimator;
+    private PlayerMovement _playerMovement;
     private float _currentCooldown;
+    private bool _isShootingAnimation;
 
-    public bool CanStartShoot() => _currentCooldown <= 0f;
+    public bool CanStartShoot() => _currentCooldown <= 0f && !_isShootingAnimation;
 
     private void Awake()
     {
         _playerAnimator = GetComponent<PlayerAnimator>();
+        _playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void Update()
@@ -29,7 +32,10 @@ public class PlayerShoot : MonoBehaviour
     public void BeginShoot()
     {
         if (!CanStartShoot()) return;
+
+        _isShootingAnimation = true;
         _currentCooldown = (_weaponInfo.FireRate > 0f) ? 1f / _weaponInfo.FireRate : 0f;
+        _playerMovement.SetMovementBlocked(true);
         _playerAnimator.AnimatorSetTrigger(AnimatorStrings.Shoot);
     }
 
@@ -65,5 +71,11 @@ public class PlayerShoot : MonoBehaviour
         }
 
         return shootDirection;
+    }
+
+    public void EndShoot()
+    {
+        _isShootingAnimation = false;
+        _playerMovement.SetMovementBlocked(false);
     }
 }

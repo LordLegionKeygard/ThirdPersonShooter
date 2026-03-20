@@ -18,16 +18,12 @@ public class PlayerActions : MonoBehaviour
 
     private void Update()
     {
-        if (_isShooting && !_playerSpeed.GetIsRun())
-        {
-            _playerMovement.SetRotationToForwardCamera();
-        }
-
         if (!_isShooting || _playerSpeed.GetIsRun() || !_playerShoot.CanStartShoot())
         {
             return;
         }
 
+        _playerMovement.SetRotationToForwardCamera();
         _playerShoot.BeginShoot();
     }
 
