@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class PlayerSpeed : MonoBehaviour
 {
-    public float CurrentSpeed { get; private set; }
+    private float _currentSpeed;
     private float _walkSpeed = 3f;
     private float _runSpeed = 6f;
     private bool _isRun;
+    public float GetCurrentSpeed() => _currentSpeed;
+    public bool GetIsRun() => _isRun;
 
 
     private void Awake()
@@ -21,6 +23,6 @@ public class PlayerSpeed : MonoBehaviour
 
     private void ChangeCurrentSpeed()
     {
-        CurrentSpeed = _isRun ? _runSpeed : _walkSpeed;
+        _currentSpeed = _isRun ? _runSpeed : _walkSpeed;
     }
 }

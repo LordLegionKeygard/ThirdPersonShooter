@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (_canWalk)
             {
-                horizontalMove = moveDirection.normalized * _playerSpeed.CurrentSpeed;
+                horizontalMove = moveDirection.normalized * _playerSpeed.GetCurrentSpeed();
             }
 
             if (_velocityMove < 1.0f)
@@ -93,5 +93,17 @@ public class PlayerMovement : MonoBehaviour
         }
 
         _verticalVelocity += _gravity * Time.deltaTime;
+    }
+
+    public void SetRotationToForwardCamera()
+    {
+        Vector3 cameraForward = Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up);
+
+        if (cameraForward.sqrMagnitude <= Mathf.Epsilon)
+        {
+            return;
+        }
+
+        transform.rotation = Quaternion.LookRotation(cameraForward.normalized, Vector3.up);
     }
 }
