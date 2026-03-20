@@ -14,7 +14,4 @@ public class WeaponInfo : ScriptableObject
     [Header("Damage")]
     public float Damage;
     public float DamageFactor; // доп урон которое получает оружие, за каждое улучшение
-
-    [Header("VFX")]
-    public GameObject ExplosionPrefab;
 }

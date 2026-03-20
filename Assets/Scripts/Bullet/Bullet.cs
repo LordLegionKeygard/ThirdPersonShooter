@@ -6,6 +6,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] private LayerMask _hitMask;
     [SerializeField] private GameObject _model;
     [SerializeField] private float _destroyTimeAfterHit;
+    [SerializeField] private ParticleSystem[] _particleSystems;
     private BulletsPool _pool;
     private float _lifeTime;
     private float _life;
@@ -24,6 +25,12 @@ public class Bullet : MonoBehaviour
     private void OnEnable()
     {
         _life = 0f;
+        ResetParticles(true);
+    }
+
+    private void OnDisable()
+    {
+        ResetParticles(false);
     }
 
     private void Update()
@@ -40,7 +47,6 @@ public class Bullet : MonoBehaviour
         {
             Vector3 pos = hit.point + Vector3.up;
 
-            // SpawnExplosion(pos);
             TryReturnBullet();
             return;
         }
@@ -48,11 +54,6 @@ public class Bullet : MonoBehaviour
         transform.position = to;
 
         if (_life >= _lifeTime) TryReturnBullet();
-    }
-
-    private void SpawnExplosion(Vector3 pos)
-    {
-        Instantiate(_weaponInfo.ExplosionPrefab, pos, Quaternion.identity);
     }
 
     private void TryReturnBullet()
@@ -66,6 +67,24 @@ public class Bullet : MonoBehaviour
         else
         {
             _pool.ReturnBullet(_weaponInfo.BulletType, gameObject);
+        }
+    }
+
+    private void ResetParticles(bool playAfterReset)
+    {
+        if (_particleSystems == null) return;
+
+        for (int i = 0; i < _particleSystems.Length; i++)
+        {
+            ParticleSystem particleSystem = _particleSystems[i];
+            if (particleSystem == null) continue;
+
+            particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            particleSystem.Clear(true);
+            if (playAfterReset)
+            {
+                particleSystem.Play(true);
+            }
         }
     }
 

@@ -134,7 +134,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _model: {fileID: 175940813330839914}
-  _destroyTimeAfterHit: 2
+  _destroyTimeAfterHit: 1
+  _particleSystems:
+  - {fileID: 3973827828817859454}
 --- !u!1 &7582499665920119329
 GameObject:
   m_ObjectHideFlags: 0

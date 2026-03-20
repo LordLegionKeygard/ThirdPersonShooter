@@ -29,6 +29,11 @@ public class BulletsPool : MonoBehaviour
 
     public GameObject GetBullet(BulletEnum bulletType)
     {
+        return GetBullet(bulletType, Vector3.zero, Quaternion.identity);
+    }
+
+    public GameObject GetBullet(BulletEnum bulletType, Vector3 position, Quaternion rotation)
+    {
         if (_bulletPools.ContainsKey(bulletType))
         {
             Queue<GameObject> pool = _bulletPools[bulletType];
@@ -36,15 +41,15 @@ public class BulletsPool : MonoBehaviour
             if (pool.Count > 0)
             {
                 GameObject bullet = pool.Dequeue();
+                bullet.transform.SetPositionAndRotation(position, rotation);
                 bullet.SetActive(true);
                 return bullet;
             }
             else
             {
                 GameObject bullet = Instantiate(_bulletPrefabs[(int)bulletType], transform);
+                bullet.transform.SetPositionAndRotation(position, rotation);
                 bullet.SetActive(true);
-
-                _bulletPools[bulletType].Enqueue(bullet);
                 return bullet;
             }
         }

@@ -42,11 +42,9 @@ public class PlayerShoot : MonoBehaviour
     public void Fire()
     {
         _muzzlePs.Play();
-        var go = _bulletsPool.GetBullet(_weaponInfo.BulletType);
         Vector3 shootDirection = GetShootDirection();
         Quaternion bulletRotation = Quaternion.LookRotation(shootDirection, Vector3.up);
-
-        go.transform.SetPositionAndRotation(_firePoint.position, bulletRotation);
+        var go = _bulletsPool.GetBullet(_weaponInfo.BulletType, _firePoint.position, bulletRotation);
 
         var bullet = go.GetComponent<Bullet>();
         bullet.Setup(_bulletsPool, _weaponInfo);
