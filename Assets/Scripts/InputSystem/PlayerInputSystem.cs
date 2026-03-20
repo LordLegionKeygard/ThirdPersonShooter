@@ -21,8 +21,8 @@ public class PlayerInputSystem : MonoBehaviour
     private void Start()
     {
         InputToggle(true);
-        SetupInputActions();
         SetupDelegates();
+        SetupInputActions();
     }
 
     private void Update()

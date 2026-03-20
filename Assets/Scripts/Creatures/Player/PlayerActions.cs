@@ -4,6 +4,7 @@ public class PlayerActions : MonoBehaviour
 {
     private PlayerSpeed _playerSpeed;
     private PlayerAnimator _playerAnimator;
+    private PlayerShoot _playerShoot;
 
     private void Awake()
     {
@@ -13,7 +14,11 @@ public class PlayerActions : MonoBehaviour
 
     public void Shoot()
     {
-
+        if(_playerShoot.CanShoot())
+        {
+            _playerShoot.TryShoot();
+            _playerAnimator.AnimatorSetTrigger(AnimatorStrings.Shoot);
+        }
     }
 
     public void Run(bool isPressed)

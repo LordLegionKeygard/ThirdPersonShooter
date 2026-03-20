@@ -8,8 +8,14 @@ public class PlayerAnimator : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
     }
+    
     public void PlayTargetBoolAnimation(bool state, int animation)
     {
         _animator.SetBool(animation, state);
+    }
+
+    public void AnimatorSetTrigger(int name)
+    {
+        _animator.SetTrigger(name);
     }
 }
