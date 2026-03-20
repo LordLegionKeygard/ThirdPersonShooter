@@ -8,12 +8,13 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField] private Transform _firePoint;
     [SerializeField] private WeaponInfo _weaponInfo;
     [SerializeField] private ParticleSystem _muzzlePs;
+    [SerializeField] private LayerMask _shootLayer;
     private PlayerAnimator _playerAnimator;
     private PlayerMovement _playerMovement;
     private float _currentCooldown;
-    private bool _isShootingAnimation;
+    private bool _isShootPressed;
 
-    public bool CanStartShoot() => _currentCooldown <= 0f && !_isShootingAnimation;
+    public bool CanStartShoot() => _currentCooldown <= 0f;
 
     private void Awake()
     {
@@ -29,11 +30,10 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
-    public void BeginShoot()
+    public void PrepareShoot()
     {
         if (!CanStartShoot()) return;
 
-        _isShootingAnimation = true;
         _currentCooldown = (_weaponInfo.FireRate > 0f) ? 1f / _weaponInfo.FireRate : 0f;
         _playerMovement.SetMovementBlocked(true);
         _playerAnimator.AnimatorSetTrigger(AnimatorStrings.Shoot);
@@ -58,7 +58,7 @@ public class PlayerShoot : MonoBehaviour
         Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         Vector3 targetPoint = ray.origin + ray.direction * 1000f;
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, _shootLayer, QueryTriggerInteraction.Ignore))
         {
             targetPoint = hit.point;
         }
@@ -73,9 +73,28 @@ public class PlayerShoot : MonoBehaviour
         return shootDirection;
     }
 
-    public void EndShoot()
+    public void SetShootMovementLock(bool isLocked)
     {
-        _isShootingAnimation = false;
+        _playerMovement.SetMovementBlocked(isLocked);
+    }
+
+    public void SetShootPressed(bool state)
+    {
+        _isShootPressed = state;
+
+        if (state)
+        {
+            _playerMovement.SetMovementBlocked(true);
+        }
+    }
+
+    public void OnShootAnimationEnd()
+    {
+        if (_isShootPressed)
+        {
+            return;
+        }
+
         _playerMovement.SetMovementBlocked(false);
     }
 }

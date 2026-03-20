@@ -18,18 +18,34 @@ public class PlayerActions : MonoBehaviour
 
     private void Update()
     {
+        if (_isShooting && !_playerSpeed.GetIsRun())
+        {
+            _playerMovement.SetRotationToForwardCamera();
+        }
+
         if (!_isShooting || _playerSpeed.GetIsRun() || !_playerShoot.CanStartShoot())
         {
             return;
         }
 
-        _playerMovement.SetRotationToForwardCamera();
-        _playerShoot.BeginShoot();
+        _playerShoot.PrepareShoot();
     }
 
     public void Shoot(bool isPressed)
     {
         _isShooting = isPressed;
+        bool canShootNow = isPressed && !_playerSpeed.GetIsRun();
+        _playerShoot.SetShootPressed(canShootNow);
+
+        if (!isPressed)
+        {
+            return;
+        }
+
+        if (canShootNow)
+        {
+            _playerShoot.SetShootMovementLock(true);
+        }
     }
 
     public void Run(bool isPressed)
@@ -40,6 +56,7 @@ public class PlayerActions : MonoBehaviour
         if (isPressed)
         {
             _isShooting = false;
+            _playerShoot.SetShootMovementLock(false);
         }
     }
 }

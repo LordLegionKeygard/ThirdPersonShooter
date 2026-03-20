@@ -28,6 +28,6 @@ public class PlayerAnimator : MonoBehaviour
 
     public void OnShootAnimationEndEvent()
     {
-        _playerShoot.EndShoot();
+        _playerShoot.OnShootAnimationEnd();
     }
 }

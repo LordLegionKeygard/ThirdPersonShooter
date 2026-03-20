@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ShotGunWeaponInfo
   m_EditorClassIdentifier: 
   BulletType: 0
-  FireRate: 0.5
-  BulletSpeed: 20
+  FireRate: 3
+  BulletSpeed: 30
   LifeTime: 3
   Damage: 1
   DamageFactor: 1
