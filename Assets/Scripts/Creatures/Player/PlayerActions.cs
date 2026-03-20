@@ -5,20 +5,29 @@ public class PlayerActions : MonoBehaviour
     private PlayerSpeed _playerSpeed;
     private PlayerAnimator _playerAnimator;
     private PlayerShoot _playerShoot;
+    private bool _isShooting;
 
     private void Awake()
     {
         _playerSpeed = GetComponent<PlayerSpeed>();
         _playerAnimator = GetComponent<PlayerAnimator>();
+        _playerShoot = GetComponent<PlayerShoot>();
     }
 
-    public void Shoot()
+    private void Update()
     {
-        if(_playerShoot.CanShoot())
+        if (!_isShooting || !_playerShoot.CanShoot())
         {
-            _playerShoot.TryShoot();
-            _playerAnimator.AnimatorSetTrigger(AnimatorStrings.Shoot);
+            return;
         }
+
+        _playerShoot.Shoot();
+        _playerAnimator.AnimatorSetTrigger(AnimatorStrings.Shoot);
+    }
+
+    public void Shoot(bool isPressed)
+    {
+        _isShooting = isPressed;
     }
 
     public void Run(bool isPressed)

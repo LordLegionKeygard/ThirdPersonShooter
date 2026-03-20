@@ -11,7 +11,7 @@ public class PlayerInputSystem : MonoBehaviour
     private delegate void Run(bool state);
     private Run _run;
 
-    private delegate void Shoot();
+    private delegate void Shoot(bool state);
     private Shoot _shoot;
 
     private void Awake()
@@ -40,7 +40,8 @@ public class PlayerInputSystem : MonoBehaviour
     {
         _playerInput.actions["Run"].performed += _ => _run(true);
         _playerInput.actions["Run"].canceled += _ => _run(false);
-        _playerInput.actions["Shoot"].performed += _ => _shoot();
+        _playerInput.actions["Shoot"].performed += _ => _shoot(true);
+        _playerInput.actions["Shoot"].canceled += _ => _shoot(false);
     }
 
     private void UpdateInputs()
@@ -58,7 +59,7 @@ public class PlayerInputSystem : MonoBehaviour
     {
         InputToggle(false);
 
-        _run = delegate { };
-        _shoot = delegate { };
+        _run = delegate(bool _) { };
+        _shoot = delegate(bool _) { };
     }
 }

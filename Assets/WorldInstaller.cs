@@ -3,11 +3,11 @@ using Zenject;
 
 public class WorldInstaller : MonoInstaller
 {
-    // [SerializeField] private EnemyDefenceSystem _enemyDefenceSystem;
+    [SerializeField] private BulletsPool _bulletsPool;
 
-    // public override void InstallBindings()
-    // {
+    public override void InstallBindings()
+    {
 
-    //     Container.Bind<EnemyDefenceSystem>().FromInstance(_enemyDefenceSystem).AsSingle();
-    // }
+        Container.Bind<BulletsPool>().FromInstance(_bulletsPool).AsSingle();
+    }
 }

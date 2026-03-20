@@ -9,9 +9,7 @@ public class WeaponInfo : ScriptableObject
     [Header("Fire")]
     public float FireRate; // выстрелов в секунду
     public float BulletSpeed; // скорость снаряда
-    public float SpreadDeg; // разброс по конусу
     public float LifeTime; // время жизни
-    public int BulletsPerShot = 1; // кол-во пуль за выстрел
 
     [Header("Damage")]
     public float Damage;

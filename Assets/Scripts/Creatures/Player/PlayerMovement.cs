@@ -30,9 +30,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        _animator.SetFloat("inputX", _playerInputSystem.MoveInput.x, 0.3f, Time.deltaTime * 10f);
-        _animator.SetFloat("inputY", _playerInputSystem.MoveInput.y, 0.3f, Time.deltaTime * 10f);
-
         Walk();
         ApplyGravity();
     }

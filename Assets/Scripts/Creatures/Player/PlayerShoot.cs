@@ -1,14 +1,14 @@
 using UnityEngine;
+using Zenject;
 
 public class PlayerShoot : MonoBehaviour
 {
-    [SerializeField] private BulletsPool _bulletsPool; // TODO Zenject
+    [Inject] private BulletsPool _bulletsPool;
     [SerializeField] private Transform _firePoint;
     [SerializeField] private WeaponInfo _weaponInfo;
     [SerializeField] private ParticleSystem _muzzlePs;
-    private bool _canShoot;
     private float _currentCooldown;
-    public bool CanShoot() => _canShoot;
+    public bool CanShoot() => _currentCooldown <= 0;
 
     private void Update()
     {
@@ -18,9 +18,9 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
-    public void TryShoot()
+    public void Shoot()
     {
-        if (_currentCooldown > 0) return;
+        if (!CanShoot()) return;
 
         _currentCooldown = (_weaponInfo.FireRate > 0f) ? 1f / _weaponInfo.FireRate : 0f;
 
@@ -29,7 +29,7 @@ public class PlayerShoot : MonoBehaviour
 
     public void Fire()
     {
-        _muzzlePs.Play();
+        // _muzzlePs.Play();
 
         var go = _bulletsPool.GetBullet(_weaponInfo.BulletType);
 
@@ -37,6 +37,5 @@ public class PlayerShoot : MonoBehaviour
 
         var bullet = go.GetComponent<Bullet>();
         bullet.Setup(_bulletsPool, _weaponInfo);
-
     }
 }
