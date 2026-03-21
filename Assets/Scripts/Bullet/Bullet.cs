@@ -13,6 +13,7 @@ public class Bullet : MonoBehaviour
     private bool _inited;
     private WeaponInfo _weaponInfo;
     private float _damage;
+    private bool _hasHit;
 
     public void Setup(BulletsPool pool, WeaponInfo weaponInfo, float damage)
     {
@@ -27,6 +28,7 @@ public class Bullet : MonoBehaviour
     private void OnEnable()
     {
         _life = 0f;
+        _hasHit = false;
         ResetParticles(true);
     }
 
@@ -47,15 +49,42 @@ public class Bullet : MonoBehaviour
 
         if (Physics.Linecast(from, to, out RaycastHit hit, _hitMask, QueryTriggerInteraction.Ignore))
         {
-            Vector3 pos = hit.point + Vector3.up;
-
-            TryReturnBullet();
+            Hit(hit.collider, hit.point);
             return;
         }
 
         transform.position = to;
 
         if (_life >= _lifeTime) TryReturnBullet();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!_inited || _hasHit || other == null)
+        {
+            return;
+        }
+
+        Hit(other, other.ClosestPoint(transform.position));
+    }
+
+    private void Hit(Collider hitCollider, Vector3 hitPoint)
+    {
+        if (_hasHit || hitCollider == null)
+        {
+            return;
+        }
+
+        _hasHit = true;
+
+        CreatureHealth creatureHealth = hitCollider.GetComponentInParent<CreatureHealth>();
+        if (creatureHealth != null)
+        {
+            creatureHealth.CalculateDamage(_damage, DamageType.PhysDamage, hitCollider.transform, transform);
+        }
+
+        transform.position = hitPoint;
+        TryReturnBullet();
     }
 
     private void TryReturnBullet()
