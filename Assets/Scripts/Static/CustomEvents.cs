@@ -8,4 +8,10 @@ public class CustomEvents : MonoBehaviour
     {
         OnHideCursor?.Invoke(state);
     }
+
+    public static Action<int> OnChangeScore;
+    public static void FireChangeScore(int score)
+    {
+        OnChangeScore?.Invoke(score);
+    }
 }

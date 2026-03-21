@@ -38,6 +38,7 @@ public class SaveGame : MonoBehaviour
     {
         SaveData = new SaveData
         {
+            Score = 0,
             HealthLevel = 0,
             SpeedLevel = 0,
             DamageLevel = 0,
