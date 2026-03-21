@@ -14,18 +14,25 @@ public class PlayerHealth : CreatureHealth
     {
         _creatureTakeDamageVFX = GetComponent<CreatureTakeDamageVFX>();
     }
-    public void CalculateHealth(bool dataLoad)
+
+    public void SetupHealth(float NewMaxHealth, bool isDataLoad)
+    {
+        MaxHealth = NewMaxHealth;
+        CalculateHealth(isDataLoad);
+    }
+
+    public void CalculateHealth(bool isDataLoad)
     {
         _healthBar.maxValue = MaxHealth;
         _healthBarBack.maxValue = MaxHealth;
 
-        if (dataLoad || CurrentHealth > MaxHealth)
+        if (isDataLoad || CurrentHealth > MaxHealth)
         {
             CurrentHealth = MaxHealth;
             _healthBar.value = CurrentHealth;
             _healthBarBack.value = CurrentHealth;
         }
-        else if (!dataLoad)
+        else if (!isDataLoad)
         {
             var currentHealthPercent = CurrentHealth / _oldMaxHealth;
             var newCurrentHealth = MaxHealth * currentHealthPercent;

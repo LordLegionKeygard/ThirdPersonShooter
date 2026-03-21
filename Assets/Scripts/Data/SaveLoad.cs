@@ -6,7 +6,6 @@ public class SaveLoad : MonoBehaviour
     [Inject] private readonly SaveGame _saveGame;
     [SerializeField] private UpgradeSystem _upgradeSystem;
     
-
     private void Awake()
     {
         _saveGame.SaveLoad = this;

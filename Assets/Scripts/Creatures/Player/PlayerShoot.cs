@@ -5,15 +5,17 @@ public class PlayerShoot : MonoBehaviour
 {
     [Inject] private BulletsPool _bulletsPool;
     [SerializeField] private Transform _firePoint;
-    [SerializeField] private WeaponInfo _weaponInfo;
     [SerializeField] private ParticleSystem _muzzlePs;
     [SerializeField] private LayerMask _shootLayer;
+    private PlayerDamage _playerDamage;
+    private PlayerEquipment _playerEquipment;
     private PlayerAnimator _playerAnimator;
     private PlayerMovement _playerMovement;
     private Camera _camera;
     private float _currentCooldown;
     private bool _isShootPressed;
     private bool _isShootAnimationPlaying;
+    private WeaponInfo _weaponInfo;
 
     public bool CanStartShoot() => _currentCooldown <= 0f && !_isShootAnimationPlaying;
 
@@ -21,6 +23,8 @@ public class PlayerShoot : MonoBehaviour
     {
         _playerAnimator = GetComponent<PlayerAnimator>();
         _playerMovement = GetComponent<PlayerMovement>();
+        _playerEquipment = GetComponent<PlayerEquipment>();
+        _playerDamage = GetComponent<PlayerDamage>();
 
         _camera = Camera.main;
     }
@@ -37,6 +41,8 @@ public class PlayerShoot : MonoBehaviour
     {
         if (!CanStartShoot()) return;
 
+        _weaponInfo = _playerEquipment.GetCurrentEquipmentWeapon();
+
         _isShootAnimationPlaying = true;
         _currentCooldown = (_weaponInfo.FireRate > 0f) ? 1f / _weaponInfo.FireRate : 0f;
         _playerMovement.SetMovementBlocked(true);
@@ -51,7 +57,7 @@ public class PlayerShoot : MonoBehaviour
         var go = _bulletsPool.GetBullet(_weaponInfo.BulletType, _firePoint.position, bulletRotation);
 
         var bullet = go.GetComponent<Bullet>();
-        bullet.Setup(_bulletsPool, _weaponInfo);
+        bullet.Setup(_bulletsPool, _weaponInfo, _playerDamage.GetDamage());
     }
 
     private Vector3 GetShootDirection()

@@ -12,14 +12,16 @@ public class Bullet : MonoBehaviour
     private float _life;
     private bool _inited;
     private WeaponInfo _weaponInfo;
+    private float _damage;
 
-    public void Setup(BulletsPool pool, WeaponInfo weaponInfo)
+    public void Setup(BulletsPool pool, WeaponInfo weaponInfo, float damage)
     {
         _pool = pool;
         _lifeTime = Mathf.Max(0.05f, weaponInfo.LifeTime);
         _life = 0f;
         _inited = true;
         _weaponInfo = weaponInfo;
+        _damage = damage;
     }
 
     private void OnEnable()
