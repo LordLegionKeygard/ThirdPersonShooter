@@ -14,6 +14,9 @@ public class PlayerInputSystem : MonoBehaviour
     private delegate void Shoot(bool state);
     private Shoot _shoot;
 
+    private delegate void Menu();
+    Menu _menu;
+
     private void Awake()
     {
         _playerInput = GetComponent<PlayerInput>();
@@ -34,6 +37,7 @@ public class PlayerInputSystem : MonoBehaviour
     {
         _run = new Run(_playerActions.Run);
         _shoot = new Shoot(_playerActions.Shoot);
+        _menu = new Menu(CustomEvents.FireEscape);
     }
 
     private void SetupInputActions()
@@ -42,6 +46,7 @@ public class PlayerInputSystem : MonoBehaviour
         _playerInput.actions["Run"].canceled += _ => _run(false);
         _playerInput.actions["Shoot"].performed += _ => _shoot(true);
         _playerInput.actions["Shoot"].canceled += _ => _shoot(false);
+        _playerInput.actions["Menu"].performed += _ => _menu();
     }
 
     private void UpdateInputs()
@@ -59,7 +64,8 @@ public class PlayerInputSystem : MonoBehaviour
     {
         InputToggle(false);
 
-        _run = delegate(bool _) { };
-        _shoot = delegate(bool _) { };
+        _run = delegate { };
+        _shoot = delegate { };
+        _menu = delegate { };
     }
 }

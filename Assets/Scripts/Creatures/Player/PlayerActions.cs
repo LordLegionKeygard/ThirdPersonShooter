@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using Zenject;
 
 public class PlayerActions : MonoBehaviour
 {
+    [Inject] private CursorHideControl _cursorHideControl;
     private PlayerSpeed _playerSpeed;
     private PlayerAnimator _playerAnimator;
     private PlayerMovement _playerMovement;
@@ -33,6 +35,8 @@ public class PlayerActions : MonoBehaviour
 
     public void Shoot(bool isPressed)
     {
+        if(_cursorHideControl.IsUiActive()) return;
+
         _isShooting = isPressed;
         bool canShootNow = isPressed && !_playerSpeed.GetIsRun();
         _playerShoot.SetShootPressed(canShootNow);
@@ -50,6 +54,8 @@ public class PlayerActions : MonoBehaviour
 
     public void Run(bool isPressed)
     {
+        if(_cursorHideControl.IsUiActive()) return;
+        
         _playerSpeed.ToggleRun(isPressed);
         _playerAnimator.PlayTargetBoolAnimation(isPressed, AnimatorStrings.Run);
 

@@ -14,4 +14,10 @@ public class CustomEvents : MonoBehaviour
     {
         OnChangeScore?.Invoke(score);
     }
+
+    public static Action OnEscape;
+    public static void FireEscape()
+    {
+        OnEscape?.Invoke();
+    }
 }
