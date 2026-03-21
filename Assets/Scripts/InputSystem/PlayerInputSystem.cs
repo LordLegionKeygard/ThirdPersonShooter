@@ -1,31 +1,34 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 public class PlayerInputSystem : MonoBehaviour
 {
     [SerializeField] private PlayerActions _playerActions;
+
     public Vector2 MoveInput { get; private set; }
+
     private PlayerInput _playerInput;
+    private InputAction _moveAction;
+    private InputAction _runAction;
+    private InputAction _shootAction;
+    private InputAction _menuAction;
+    private bool _isCanInput;
 
-    private delegate void Run(bool state);
-    private Run _run;
-
-    private delegate void Shoot(bool state);
-    private Shoot _shoot;
-
-    private delegate void Menu();
-    Menu _menu;
 
     private void Awake()
     {
         _playerInput = GetComponent<PlayerInput>();
+        _moveAction = _playerInput.actions["Move"];
+        _runAction = _playerInput.actions["Run"];
+        _shootAction = _playerInput.actions["Shoot"];
+        _menuAction = _playerInput.actions["Menu"];
     }
-    private void Start()
+
+    private void OnEnable()
     {
+        _isCanInput = true;
         InputToggle(true);
-        SetupDelegates();
-        SetupInputActions();
+        SubscribeInputActions();
     }
 
     private void Update()
@@ -33,39 +36,81 @@ public class PlayerInputSystem : MonoBehaviour
         UpdateInputs();
     }
 
-    private void SetupDelegates()
-    {
-        _run = new Run(_playerActions.Run);
-        _shoot = new Shoot(_playerActions.Shoot);
-        _menu = new Menu(CustomEvents.FireEscape);
-    }
-
-    private void SetupInputActions()
-    {
-        _playerInput.actions["Run"].performed += _ => _run(true);
-        _playerInput.actions["Run"].canceled += _ => _run(false);
-        _playerInput.actions["Shoot"].performed += _ => _shoot(true);
-        _playerInput.actions["Shoot"].canceled += _ => _shoot(false);
-        _playerInput.actions["Menu"].performed += _ => _menu();
-    }
-
     private void UpdateInputs()
     {
-        MoveInput = _playerInput.actions["Move"].ReadValue<Vector2>();
+        if (!_isCanInput) return;
+        MoveInput = _moveAction.ReadValue<Vector2>();
+    }
+
+    private void SubscribeInputActions()
+    {
+        _runAction.performed += OnRunPerformed;
+        _runAction.canceled += OnRunCanceled;
+        _shootAction.performed += OnShootPerformed;
+        _shootAction.canceled += OnShootCanceled;
+        _menuAction.performed += OnMenuPerformed;
+    }
+
+    private void UnsubscribeInputActions()
+    {
+        _runAction.performed -= OnRunPerformed;
+        _runAction.canceled -= OnRunCanceled;
+        _shootAction.performed -= OnShootPerformed;
+        _shootAction.canceled -= OnShootCanceled;
+        _menuAction.performed -= OnMenuPerformed;
+    }
+
+    private void OnRunPerformed(InputAction.CallbackContext context)
+    {
+        if (!_isCanInput) return;
+        _playerActions.Run(true);
+    }
+
+    private void OnRunCanceled(InputAction.CallbackContext context)
+    {
+        if (!_isCanInput) return;
+        _playerActions.Run(false);
+    }
+
+    private void OnShootPerformed(InputAction.CallbackContext context)
+    {
+        if (!_isCanInput) return;
+        _playerActions.Shoot(true);
+    }
+
+    private void OnShootCanceled(InputAction.CallbackContext context)
+    {
+        if (!_isCanInput) return;
+        _playerActions.Shoot(false);
+    }
+
+    private void OnMenuPerformed(InputAction.CallbackContext context)
+    {
+        if (!_isCanInput) return;
+        CustomEvents.FireEscape();
     }
 
     public void InputToggle(bool state)
     {
-        if (state) _playerInput.ActivateInput();
-        else _playerInput.DeactivateInput();
+        if (state)
+        {
+            _playerInput.ActivateInput();
+        }
+        else
+        {
+            _playerInput.DeactivateInput();
+        }
+    }
+
+    private void OnDisable()
+    {
+        _isCanInput = false;
+        UnsubscribeInputActions();
+        InputToggle(false);
     }
 
     private void OnDestroy()
     {
-        InputToggle(false);
-
-        _run = delegate { };
-        _shoot = delegate { };
-        _menu = delegate { };
+        _isCanInput = false;
     }
 }
